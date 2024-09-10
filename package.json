@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "thirdweb": "^5.52.0"
+  }
+}
