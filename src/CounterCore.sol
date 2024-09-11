@@ -10,6 +10,10 @@ interface BeforeIncrementCallback {
 contract CounterCore is Core {
     uint256 public count;
 
+    constructor(address owner) {
+        _initializeOwner(owner);
+    }
+
     function getSupportedCallbackFunctions()
         public
         pure
@@ -23,11 +27,8 @@ contract CounterCore is Core {
         });
     }
 
-    function supportsInterface(
-        bytes4 interfaceId
-    ) public view override returns (bool) {
-        return
-            interfaceId == 0x00000001 || super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId) public view override returns (bool) {
+        return interfaceId == 0x00000001 || super.supportsInterface(interfaceId);
     }
 
     function increment() public {
@@ -35,9 +36,7 @@ contract CounterCore is Core {
         count = newCount;
     }
 
-    function _beforeIncrement(
-        uint256 count
-    ) internal returns (uint256 newCount) {
+    function _beforeIncrement(uint256 count) internal returns (uint256 newCount) {
         (, bytes memory returndata) = _executeCallbackFunction(
             BeforeIncrementCallback.beforeIncrement.selector,
             abi.encodeCall(BeforeIncrementCallback.beforeIncrement, (count))
